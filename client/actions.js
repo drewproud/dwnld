@@ -1,1 +1,2 @@
-export const DATA_RECEIVED = 'cart/DATA_RECEIVED';
+export const DATA_RECEIVED = 'puzzle/DATA_RECEIVED';
+export const SQUARE_MOVE_REQUESTED = 'puzzle/SQUARE_MOVE_REQUESTED';

@@ -1,25 +1,30 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import styles from './App.css';
-import { loadData } from '../actionCreators';
 import { bindActionCreators } from 'redux';
-import initialData from '../data';
-import { selectItemsForCart } from '../reducers';
+
+import { loadData, requestMoveSquare } from '../actionCreators';
+import { selectGrid } from '../reducers';
+import GridContainer from './GridContainer';
 
 const App = React.createClass({
   propTypes: {
     loadData: React.PropTypes.func.isRequired,
-    itemsForCart: React.PropTypes.array.isRequired
+    requestMoveSquare: React.PropTypes.func.isRequired,
+    grid: React.PropTypes.array.isRequired
   },
 
   componentDidMount: function() {
-      this.props.loadData(initialData);
+    this.props.loadData();
   },
 
   render() {
-    const { itemsForCart } = this.props;
+    const { grid } = this.props;
     return (
       <div>
+        <GridContainer
+          grid={ grid } 
+          requestMoveSquare={ this.props.requestMoveSquare }
+        />
       </div>
     );
   },
@@ -27,14 +32,15 @@ const App = React.createClass({
 
 function mapStateToProps(state) {
   return {
-    itemsForCart: selectItemsForCart(state),
+    grid: selectGrid(state),
   };
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({
-        loadData,
-    }, dispatch);
+  return bindActionCreators({
+    loadData,
+    requestMoveSquare,
+  }, dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

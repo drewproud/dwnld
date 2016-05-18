@@ -1,40 +1,36 @@
-const data = {
-    'treats': [
-        {
-            'id': 1,
-            'name': 'Brownie',
-            'imageURL': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTHdr1eTXEMs68Dx-b_mZT0RpifEQ8so6A1unRsJlyJIPe0LUE2HQ',
-            'price': 2.00,
-            'bulkPricing': {
-                'amount': 4,
-                'totalPrice': 7.00,
-            },
-        },
-        {
-            'id': 2,
-            'name': 'Key Lime Cheesecake',
-            'imageURL': 'http://1.bp.blogspot.com/-7we9Z0C_fpI/T90JXcg3YsI/AAAAAAAABn4/EN7u2vMuRug/s1600/key+lime+cheesecake+slice+in+front.jpg',
-            'price': 8.00,
-            'bulkPricing': null,
-        },
-        {
-            'id': 3,
-            'name': 'Cookie',
-            'imageURL': 'http://www.mayheminthekitchen.com/wp-content/uploads/2015/05/chocolate-cookie-square.jpg',
-            'price': 1.25,
-            'bulkPricing': {
-                'amount': 6,
-                'totalPrice': 6.00,
-            },
-        },
-        {
-            'id': 4,
-            'name': 'Mini Gingerbread Donut',
-            'imageURL': 'https://s3.amazonaws.com/pinchofyum/gingerbread-donuts-22.jpg',
-            'price': 0.50,
-            'bulkPricing': null,
-        },
-    ],
+import R from 'ramda';
+
+function getRandomOrderedListIterator(maxExclusive) {
+  const squared = maxExclusive * maxExclusive;
+  const list = R.compose(
+    R.sortBy(() => Math.random()),
+    R.range(0)
+  )(squared);
+
+  return function() {
+    return list.pop();
+  };
+}
+
+function getPartialListMap(size, next) {
+  return function() {
+    return R.compose(
+      R.map(next),
+      R.range(0)
+    )(size);
+  };
 };
 
-export default data;
+function get2dArray(size) {
+  const randomListIterator = getRandomOrderedListIterator(size);
+  return R.compose(
+    R.map(getPartialListMap(size, randomListIterator)),
+    R.range(0)
+  )(size);
+}
+
+function getRandomStartingData() {
+  return get2dArray(4);
+}
+
+export default getRandomStartingData;
