@@ -8,14 +8,15 @@ const Square = React.createClass({
   propTypes: {
     value: React.PropTypes.number.isRequired,
     rowNum: React.PropTypes.number.isRequired,
+    colNum: React.PropTypes.number.isRequired,
     gridSize: React.PropTypes.number.isRequired,
     requestMoveSquare: React.PropTypes.func.isRequired,
   },
 
   handleClick: function(event) {
     event.preventDefault();
-    const { requestMoveSquare, value } = this.props;
-    requestMoveSquare(value);
+    const { requestMoveSquare, rowNum, colNum } = this.props;
+    requestMoveSquare(rowNum, colNum);
   },
 
   render() {

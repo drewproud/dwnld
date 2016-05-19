@@ -11,9 +11,22 @@ const GridRow = React.createClass({
 
   render() {
     const { row, gridSize, requestMoveSquare, rowNum } = this.props;
+    const columns = row.map(function(value, idx) {
+      return (
+        <Square
+          rowNum={ rowNum }
+          colNum={ idx }
+          key={ idx }
+          value={ value }
+          gridSize={ gridSize }
+          requestMoveSquare={ requestMoveSquare }
+        />
+      );
+    });
+
     return (
       <div>
-        { row.map((value) => <Square rowNum={ rowNum } value={ value } gridSize={ gridSize } requestMoveSquare={ requestMoveSquare } />) }
+        { columns }
       </div>
     );
   },

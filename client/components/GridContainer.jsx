@@ -17,9 +17,21 @@ const GridContainer = React.createClass({
       height: GRID_SIZE_IN_PIXELS,
     };
 
+    const rows = grid.map(function(row, idx) {
+      return (
+        <GridRow
+          row={ row }
+          key={ idx }
+          rowNum={ idx }
+          gridSize={ GRID_SIZE_IN_PIXELS }
+          requestMoveSquare={ requestMoveSquare }
+        />
+      );
+    });
+
     return (
       <div style={ style }>
-        { grid.map((row) => <GridRow row={ row } gridSize={ GRID_SIZE_IN_PIXELS } requestMoveSquare={ requestMoveSquare }/>) }
+        { rows }
       </div>
     );
   },

@@ -1,41 +1,64 @@
+import R from 'ramda';
 import { DATA_RECEIVED, SQUARE_MOVE_REQUESTED } from '../actions';
 
-function getValueForPair(x, y, offsetX, offsetY) {
-  if ((x + offsetX >= 0) && (x + offsetX < 16) && (y + offsetY >= 0) && (y + offsetY < 16)) {
-    return grid[y + offsetY][x + offsetX];
-  }
+const MIN_VALUE = 0;
+const MAX_VALUE = 4;
 
-  return null;
+function getPoint(x, y) {
+  return { x, y };
 }
 
+function isPointInBounds(point) {
+  return (point >= MIN_VALUE) && (point < MAX_VALUE);
+}
 
-function getValidMoveForSquare(grid, x, y) {
-  const moves = [
-    [0, 1],
-    [0, -1],
-    [1, 0],
-    [-1, 0],
-  ];
+const addPoints = R.curry(function(point, offset) {
+  return {
+    x: point.x + offset.x,
+    y: point.y + offset.y,
+  };
+});
 
-  for (let i = 0; i < moves.length; i++) {
-    const move = moves[i];
-    const offsetX = move[0];
-    const offsetY = move[1];
-    if (getValueForPair(x, y, offsetX, offsetY) === 0) {
-      return move;
-    }
-    return null;
-  }
+const isTargetTheEmptyCell = R.curry(function(grid, possibleTarget) {
+  return isTargetInBounds(possibleTarget) && grid[possibleTarget.y][possibleTarget.x] === 0;
+});
+
+function isTargetInBounds(possibleTarget) {
+  return isPointInBounds(possibleTarget.x) && isPointInBounds(possibleTarget.y);
+}
+
+function getTargetCoordinates(grid, point) {
+  const offsets = [getPoint(0, 1), getPoint(0, -1), getPoint(1, 0), getPoint(-1, 0)];
+
+  return R.compose(
+    R.head,
+    R.filter(isTargetTheEmptyCell(grid)),
+    R.map(addPoints(point))
+  )(offsets);
+
+  //let possibleTarget; 
+  //for (let i = 0; i < moves.length; i++) {
+    //possibleTarget = addPoints(point, moves[i]);
+    //if (isTargetInBounds(possibleTarget) && isTargetTheEmptyCell(grid, possibleTarget)) {
+      //return possibleTarget;
+    //}
+  //}
+
+  //return null;
 }
 
 function getGridWithAppliedMove(grid, x, y) {
   const newGrid = [ ...grid ];
-  const validMove = getValidMoveForSquare(grid, x, y);
-  if (validMove) {
-    newGrid[y + validMove[1]][x + validMove[0]] = grid[y][x];
+  const point = getPoint(x, y);
+  console.log(point);
+  const targetCoordinates = getTargetCoordinates(grid, point);
+
+  if (targetCoordinates) {
+    newGrid[targetCoordinates.y][targetCoordinates.x] = grid[y][x];
     newGrid[y][x] = 0;
     return newGrid;
   }
+
   return grid;
 }
 
