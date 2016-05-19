@@ -35,22 +35,11 @@ function getTargetCoordinates(grid, point) {
     R.filter(isTargetTheEmptyCell(grid)),
     R.map(addPoints(point))
   )(offsets);
-
-  //let possibleTarget; 
-  //for (let i = 0; i < moves.length; i++) {
-    //possibleTarget = addPoints(point, moves[i]);
-    //if (isTargetInBounds(possibleTarget) && isTargetTheEmptyCell(grid, possibleTarget)) {
-      //return possibleTarget;
-    //}
-  //}
-
-  //return null;
 }
 
 function getGridWithAppliedMove(grid, x, y) {
   const newGrid = [ ...grid ];
   const point = getPoint(x, y);
-  console.log(point);
   const targetCoordinates = getTargetCoordinates(grid, point);
 
   if (targetCoordinates) {
@@ -63,7 +52,6 @@ function getGridWithAppliedMove(grid, x, y) {
 }
 
 function grid(state = [], action) {
-  console.log(action);
   switch(action.type) {
     case DATA_RECEIVED:
       return action.payload.data;

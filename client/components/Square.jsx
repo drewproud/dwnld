@@ -25,7 +25,7 @@ const Square = React.createClass({
     const size = getSquareSize(gridSize);
     const style = {
       float: 'left',
-      backgroundColor: 'blue',
+      backgroundColor: 'aliceblue',
       width: size,
       height: size,
       textAlign: 'center',
